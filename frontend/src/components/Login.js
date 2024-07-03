@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-    const host = "http://localhost:5000";
+    const host = "https://cloudnotebook-3gsi.onrender.com";
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
     const navigate = useNavigate();

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import noteContext from './noteContext';
 
+
 const NoteState = (props) => {
-    const host = "http://localhost:5000"
+    const host = "https://cloudnotebook-3gsi.onrender.com"
     const notesInitial = [];
 
     const [notes, setNotes] = useState(notesInitial);
@@ -16,15 +17,27 @@ const NoteState = (props) => {
             headers: {
                 'Content-Type': 'application/json',
                 "auth-token":localStorage.getItem('token'), 
-            }, 
-        })
+            },  
+        }) 
         const json = await response.json();
         console.log(json)
-        //console.log(localStorage.getItem('token'))
+        //console.log(localStorage.getItem('token')) 
         setNotes(json);
         
      
     }
+
+    const getNotesCount = async () => {
+        const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "auth-token": localStorage.getItem('token'), 
+            },
+        });
+        const json = await response.json();
+        return json.length;
+    };
 
 
 
@@ -65,7 +78,7 @@ const NoteState = (props) => {
                 
             },
         })
-        const json = response.json();
+        //const json = response.json();
         const newNotes = notes.filter(note => note._id !== id);
         setNotes(newNotes);
     }
@@ -99,7 +112,7 @@ const NoteState = (props) => {
 
 
     return (
-        <noteContext.Provider value={{ notes, setNotes ,addNote,deleteNote,editNote,getNotes}}>
+        <noteContext.Provider value={{ notes, setNotes ,addNote,deleteNote,editNote,getNotes,getNotesCount}}>
             {props.children}
         </noteContext.Provider>
     );

@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import noteContext from '../context/notes/noteContext';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const { getNotesCount } = useContext(noteContext);
+    const [notesCount, setNotesCount] = useState(0);
+    const isLoggedIn = localStorage.getItem('token') !== null;
+
+    useEffect(() => {
+        const fetchNotesCount = async () => {
+            if (isLoggedIn) {
+                const count = await getNotesCount();
+                setNotesCount(count);
+            }
+        };
+        fetchNotesCount();
+    }, [isLoggedIn, getNotesCount]);
+
+
     const handleMouseEnter = (e) => {
         e.target.style.color = linkHoverStyle.color;
         e.target.style.transform = 'scale(1.1)';
@@ -18,9 +34,7 @@ const Navbar = () => {
         navigate('/login');
     };
 
-    // Mock data for notes count
-    const notesCount = 10;
-    const isLoggedIn = localStorage.getItem('token') !== null;
+;
 
     return (
         <nav style={navbarStyle}>
